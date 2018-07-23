@@ -1,0 +1,5 @@
+/build
+app.iml
+src/androidTest
+src/test
+*.apk
