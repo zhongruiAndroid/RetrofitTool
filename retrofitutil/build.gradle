@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "25.0.0"
+    compileSdkVersion 27
+//    buildToolsVersion "25.0.0"
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 24
+        minSdkVersion 18
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
@@ -28,9 +28,9 @@ dependencies {
 //    compile(name: 'logger', ext: 'aar')
 //    compile fileTree(dir: 'libs', include: ['*.jar'])
 //    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.2.1'
+    implementation 'com.android.support:appcompat-v7:27.+'
     //retrofit网络请求
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     //Rxjava for android
 
 //    compile 'io.reactivex:rxandroid:1.2.1'
@@ -42,16 +42,22 @@ dependencies {
 
 
     //替掉默认从all, 用rxjava1做转换器
-//    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+//    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     //rxjava2
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     //gson转换器
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
     //Scalars (primitives, boxed, and String)
-    compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
     //logger
 //    compile 'com.orhanobut:logger:1.15'
 }
+
+
+
+/*---------------项目编译失败无法运行，删除以下配置---------------*/
+
+
 /***************发布aar包的配置**********************/
 
 apply plugin: 'com.github.dcendents.android-maven'
@@ -60,9 +66,12 @@ apply plugin: 'com.jfrog.bintray'
 // 项目引用的版本号，比如compile 'com.yanzhenjie:andserver:1.0.1'中的1.0.1就是这里配置的。
 version = jcenter_version as String
 
-// 定义两个链接，下面会用到。
-def siteUrl = jcenter_siteUrl as String    //项目主页  project homepage
-def gitUrl = jcenter_gitUrl  as String//  Git仓库的url project git
+def siteUrl = jcenter_siteUrl as String   // project homepage
+def gitUrl = jcenter_gitUrl as String// project git
+def jcenter_name = jcenter_name as String// project git
+def developer_id = developer_id as String// project git
+def developer_name = developer_name as String// project git
+def developer_email = developer_email as String// project git
 // 唯一包名，比如compile 'com.yanzhenjie:andserver:1.0.1'中的com.yanzhenjie就是这里配置的。
 group = jcenter_package as String
 install {
@@ -87,9 +96,9 @@ install {
                 //填写开发者基本信息，复制我的，这里需要修改。
                 developers {
                     developer {
-                        id 'zhongrui' // 开发者的id。
-                        name 'zhongrui' // 开发者名字。
-                        email 'zr2013123@sina.com' // 开发者邮箱。
+                        id developer_id // 开发者的id。
+                        name developer_name // 开发者名字。
+                        email developer_email // 开发者邮箱。
                     }
                 }
 
@@ -142,12 +151,15 @@ bintray {
 
     configurations = ['archives']
     pkg {
-        repo = "customview"  // 上传到maven库。
-        name = "RetrofitTool" //jcenter_package_name as String  // 发布到Bintray上的项目名字，这里的名字不是compile 'com.yanzhenjie:andserver:1.0.1'中的andserver。
-        userOrg = 'zhongrui' // Bintray的用户名，2016年11月更新。
+        repo = "mylibrary"  // 上传到maven库。
+        name = jcenter_name //jcenter_package_name as String  // 发布到Bintray上的项目名字，这里的名字不是compile 'com.yanzhenjie:andserver:1.0.1'中的andserver。
+        userOrg = user // Bintray的用户名，2016年11月更新。
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
         publish = true // 是否是公开项目。
     }
 }
+
+
+/*---------------项目编译失败无法运行，删除以上配置---------------*/

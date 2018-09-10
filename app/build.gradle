@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "25.0.0"
+    compileSdkVersion 27
+//    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.test.retrofit"
-        minSdkVersion 15
-        targetSdkVersion 24
+        minSdkVersion 18
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -21,11 +21,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 //    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
-    compile 'com.github:customview:1.0.3'
-    compile 'com.github:retrofitutil:1.0.6'
+    implementation 'com.android.support:appcompat-v7:27.+'
+    implementation 'com.android.support:design:27.+'
+    implementation 'com.github:customview:1.0.3'
+    implementation 'com.github:retrofitutil:1.0.6'
 //    compile project(':retrofitutil')
 }

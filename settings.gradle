@@ -1,1 +1,1 @@
-include ':app', ':retrofitutil', ':logger'
+include ':app', ':retrofitutil'
