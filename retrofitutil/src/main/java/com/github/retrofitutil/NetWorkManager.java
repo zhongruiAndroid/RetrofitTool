@@ -20,7 +20,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okio.Buffer;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
@@ -217,7 +217,8 @@ public class NetWorkManager {
             return new Retrofit.Builder()
                     .baseUrl(url)
                     .client(getHttpClient(false))
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
@@ -227,7 +228,8 @@ public class NetWorkManager {
                     commonClient = new Retrofit.Builder()
                             .baseUrl(baseUrl)
                             .client(getHttpClient(false))
-                            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
                 }
@@ -249,7 +251,8 @@ public class NetWorkManager {
             return new Retrofit.Builder()
                     .baseUrl(url)
                     .client(getHttpClient(true))
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
@@ -259,7 +262,8 @@ public class NetWorkManager {
                     commonWithCacheClient = new Retrofit.Builder()
                             .baseUrl(baseUrl)
                             .client(getHttpClient(true))
-                            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
                 }
@@ -281,7 +285,8 @@ public class NetWorkManager {
             return new Retrofit.Builder()
                     .baseUrl(url)
                     .client(getHttpClient(false))
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
         }
@@ -291,7 +296,8 @@ public class NetWorkManager {
                     stringClient = new Retrofit.Builder()
                             .baseUrl(baseUrl)
                             .client(getHttpClient(false))
-                            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                             .addConverterFactory(ScalarsConverterFactory.create())
                             .build();
                 }
@@ -313,7 +319,8 @@ public class NetWorkManager {
             return new Retrofit.Builder()
                     .baseUrl(url)
                     .client(getHttpClient(true))
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
         }
@@ -323,7 +330,8 @@ public class NetWorkManager {
                     stringWithCacheClient = new Retrofit.Builder()
                             .baseUrl(baseUrl)
                             .client(getHttpClient(true))
-                            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                             .addConverterFactory(ScalarsConverterFactory.create())
                             .build();
                 }
