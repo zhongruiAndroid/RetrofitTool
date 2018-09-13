@@ -41,7 +41,7 @@ NetWorkManager.getInstance(this,"http://www.***.***/",BuildConfig.DEBUG)
 比如 NetWorkManager.getCommonClient(yourBaseUrl);
 ```
 
-[ ![Download](https://api.bintray.com/packages/zhongrui/customview/RetrofitTool/images/download.svg) ](https://bintray.com/zhongrui/customview/RetrofitTool/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/zhongrui/mylibrary/RetrofitTool/images/download.svg) ](https://bintray.com/zhongrui/mylibrary/RetrofitTool/_latestVersion)
 ```
 dependencies{
    compile 'com.github:retrofitutil:最新版本号看上面的蓝色小图片'
