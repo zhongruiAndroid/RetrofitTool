@@ -1,5 +1,6 @@
 package com.github.retrofitutil;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -10,7 +11,7 @@ import android.net.NetworkInfo;
 public class NetworkMonitor {
     public static boolean isConnected(Context context) {
         ConnectivityManager cm =(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        @SuppressLint("MissingPermission") NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&activeNetwork.isConnectedOrConnecting();
     }
 }

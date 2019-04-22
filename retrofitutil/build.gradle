@@ -28,7 +28,7 @@ dependencies {
 //    compile(name: 'logger', ext: 'aar')
 //    compile fileTree(dir: 'libs', include: ['*.jar'])
 //    testCompile 'junit:junit:4.12'
-    implementation 'com.android.support:appcompat-v7:28.+'
+//    implementation 'com.android.support:appcompat-v7:28.+'
     //retrofit网络请求
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     //Rxjava for android

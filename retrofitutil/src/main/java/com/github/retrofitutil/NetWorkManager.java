@@ -1,6 +1,7 @@
 package com.github.retrofitutil;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.github.retrofitutil.logger.AndroidLogAdapter;
 import com.github.retrofitutil.logger.FormatStrategy;
@@ -9,6 +10,7 @@ import com.github.retrofitutil.logger.PrettyFormatStrategy;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -18,7 +20,9 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okio.Buffer;
+import okio.BufferedSource;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -73,39 +77,42 @@ public class NetWorkManager {
     private static File httpCacheDirectory;//= new File(context.getCacheDir(), "MyRetrofitCache");
     private static Cache cache;//= new Cache(httpCacheDirectory, cacheSize);
     private static String noNetworkExceptionMsg;
-    private static boolean isDebug=true;
+    private static boolean isDebug = true;
 
     /*缓存时间默认60秒*/
-    private int cachTime=60;
+    private int cachTime = 60;
     /*缓存数据大小,默认20MB 20*1024*1024*/
-    private int cacheSize=20 * 1024 * 1024;
+    private int cacheSize = 20 * 1024 * 1024;
     /*无网络提示语*/
-    private String noNetworkMsg="无网络连接,请稍后再试";
+    private String noNetworkMsg = "无网络连接,请稍后再试";
 
     /***
      * @param cachTime 设置缓存时间，默认60秒
      * @return
      */
-    public NetWorkManager setCachTime(int cachTime){
-        this.cachTime=cachTime;
+    public NetWorkManager setCachTime(int cachTime) {
+        this.cachTime = cachTime;
         return this;
     }
+
     /***
      * @param noNetworkMsg 设置无网络提示语
      * @return
      */
-    public NetWorkManager setNoNetWorkMsg(String noNetworkMsg){
-        this.noNetworkMsg=noNetworkMsg;
+    public NetWorkManager setNoNetWorkMsg(String noNetworkMsg) {
+        this.noNetworkMsg = noNetworkMsg;
         return this;
     }
+
     /***
      * @param cacheSize 设置缓存数据大小，默认20MB  20*1024*1024
      * @return
      */
-    public NetWorkManager setCacheSize(int cacheSize){
-        this.cacheSize=cacheSize;
+    public NetWorkManager setCacheSize(int cacheSize) {
+        this.cacheSize = cacheSize;
         return this;
     }
+
     /***
      * @param httpConnectTimeout 设置请求超时时间,默认15秒
      * @return
@@ -114,6 +121,7 @@ public class NetWorkManager {
         HTTP_CONNECT_TIMEOUT = httpConnectTimeout;
         return this;
     }
+
     /***
      * @param httpReadTimeout 设置写入时间,默认20秒
      * @return
@@ -122,6 +130,7 @@ public class NetWorkManager {
         HTTP_READ_TIMEOUT = httpReadTimeout;
         return this;
     }
+
     /***
      * @param httpWriteTimeout 设置读取时间,默认20秒
      * @return
@@ -130,17 +139,18 @@ public class NetWorkManager {
         HTTP_WRITE_TIMEOUT = httpWriteTimeout;
         return this;
     }
+
     /**
-     *
-     * @param ctx 上下文
-     * @param url baseUrl:ip+端口
+     * @param ctx     上下文
+     * @param url     baseUrl:ip+端口
      * @param isDebug 是否是debug模式 true-debug,false-release
      * @return
      */
-    public static NetWorkManager getInstance(Context ctx, String url,boolean isDebug){
-        return new NetWorkManager(ctx,url,isDebug);
+    public static NetWorkManager getInstance(Context ctx, String url, boolean isDebug) {
+        return new NetWorkManager(ctx, url, isDebug);
     }
-    private NetWorkManager(Context ctx, String url,final boolean isDebug) {
+
+    private NetWorkManager(Context ctx, String url, final boolean isDebug) {
         FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
                 .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
                 .methodCount(0)         // (Optional) How many method line to show. Default 2
@@ -148,7 +158,7 @@ public class NetWorkManager {
                 .tag("MyLog")   // (Optional) Custom tag for each log. Default PRETTY_LOGGER
                 .build();
 
-        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy){
+        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy) {
             @Override
             public boolean isLoggable(int priority, String tag) {
                 return isDebug;
@@ -157,11 +167,12 @@ public class NetWorkManager {
         /*Logger.init("MyLog")
                 .logLevel(isDebug ? LogLevel.FULL : LogLevel.NONE)
                 .methodCount(3);*/
-        this.isDebug=isDebug;
+        this.isDebug = isDebug;
         context = ctx;
         baseUrl = url;
     }
-    public void complete(){
+
+    public void complete() {
         noNetworkExceptionMsg = noNetworkMsg;
         httpCacheDirectory = new File(context.getCacheDir(), "MyRetrofitCache");
         cache = new Cache(httpCacheDirectory, cacheSize);
@@ -182,11 +193,12 @@ public class NetWorkManager {
 
     /**
      * 无封装client不与Rxjava结合,返回ResponseBody,无缓存
+     *
      * @param url
      * @return
      */
     public static Retrofit getSimpleClient(String url) {
-        if(url!=null){
+        if (url != null) {
             return new Retrofit.Builder()
                     .baseUrl(url)
                     .build();
@@ -203,17 +215,19 @@ public class NetWorkManager {
         }
         return simpleClient;
     }
+
     public static Retrofit getSimpleClient() {
         return getSimpleClient(null);
     }
 
     /**
      * 常规的客户端(返回对象,默认不带缓存)
+     *
      * @param url
      * @return
      */
     public static Retrofit getCommonClient(String url) {
-        if(url!=null){
+        if (url != null) {
             return new Retrofit.Builder()
                     .baseUrl(url)
                     .client(getHttpClient(false))
@@ -235,17 +249,19 @@ public class NetWorkManager {
         }
         return commonClient;
     }
+
     public static Retrofit getCommonClient() {
         return getCommonClient(null);
     }
 
     /**
      * 带缓存的客户端(返回对象)
+     *
      * @param url
      * @return
      */
     public static Retrofit getCommonWithCacheClient(String url) {
-        if(url!=null){
+        if (url != null) {
             return new Retrofit.Builder()
                     .baseUrl(url)
                     .client(getHttpClient(true))
@@ -267,12 +283,14 @@ public class NetWorkManager {
         }
         return commonWithCacheClient;
     }
+
     public static Retrofit getCommonWithCacheClient() {
         return getCommonWithCacheClient(null);
     }
 
     /**
      * 返回String的客户端(不带缓存)
+     *
      * @param url
      * @return
      */
@@ -299,12 +317,14 @@ public class NetWorkManager {
         }
         return stringClient;
     }
+
     public static Retrofit getStringClient() {
         return getStringClient(null);
     }
 
     /**
      * 返回String的客户端(带缓存)
+     *
      * @param url
      * @return
      */
@@ -331,12 +351,14 @@ public class NetWorkManager {
         }
         return stringWithCacheClient;
     }
+
     public static Retrofit getStringWithCacheClient() {
         return getStringWithCacheClient(null);
     }
 
     /**
      * 普通client不与Rxjava结合,返回对象,无缓存
+     *
      * @param url
      * @return
      */
@@ -362,6 +384,7 @@ public class NetWorkManager {
         }
         return generalClient;
     }
+
     public static Retrofit getGeneralClient() {
         return getGeneralClient(null);
     }
@@ -369,6 +392,7 @@ public class NetWorkManager {
 
     /**
      * 普通client不与Rxjava结合,返回对象,有缓存
+     *
      * @param url
      * @return
      */
@@ -393,12 +417,14 @@ public class NetWorkManager {
         }
         return generalWithCachClient;
     }
+
     public static Retrofit getGeneralWithCachClient() {
         return getGeneralWithCachClient(null);
     }
 
     /**
      * 普通client不与Rxjava结合,返回String,无缓存
+     *
      * @param url
      * @return
      */
@@ -423,12 +449,14 @@ public class NetWorkManager {
         }
         return generalStringClient;
     }
+
     public static Retrofit getGeneralStringClient() {
         return getGeneralStringClient(null);
     }
 
     /**
      * 普通client不与Rxjava结合,返回String,有缓存
+     *
      * @param url
      * @return
      */
@@ -453,6 +481,7 @@ public class NetWorkManager {
         }
         return generalStringWithCachClient;
     }
+
     public static Retrofit getGeneralStringWithCachClient() {
         return getGeneralStringWithCachClient(null);
     }
@@ -479,7 +508,10 @@ public class NetWorkManager {
                     Response response = chain.proceed(request);
                     long t2 = System.nanoTime();
                     double time = (t2 - t1) / 1e6d;
-                    String bodyStr = response.body().string();
+                    String bodyStr  = getStringForSource(response);
+                    if(bodyStr==null){
+                        bodyStr=response.body().string();
+                    }
                     String msg = "%s\nurl->" + request.url()
                             + "\nparamstag"
                             + "\ntime->" + time
@@ -489,7 +521,7 @@ public class NetWorkManager {
                             + "\nbody->" + bodyStr;
 
                     if (request.method().equals("GET")) {
-                        Logger.i( "GET"+msg);
+                        Logger.i("GET" + msg);
                     } else if (request.method().equals("POST")) {
                         Request copyRequest = request.newBuilder().build();
                         if (copyRequest.body() instanceof FormBody) {
@@ -497,18 +529,18 @@ public class NetWorkManager {
                         }
                         Buffer buffer = new Buffer();
                         copyRequest.body().writeTo(buffer);
-                        msg=msg.replace("paramstag","request params:"+buffer.readUtf8());
-                        Logger.i("POST"+msg );
+                        msg = msg.replace("paramstag", "request params:" + buffer.readUtf8());
+                        Logger.i("POST" + msg);
                     } else if (request.method().equals("PUT")) {
-                        Logger.i("PUT"+msg );
+                        Logger.i("PUT" + msg);
                     } else if (request.method().equals("DELETE")) {
-                        Logger.i("DELETE"+msg );
+                        Logger.i("DELETE" + msg);
                     }
                     MediaType mediaType = response.body().contentType();
                     return response.newBuilder()
                             .body(okhttp3.ResponseBody.create(mediaType, bodyStr))
                             .build();
-                }else{
+                } else {
                     return chain.proceed(request);
                 }
 
@@ -530,6 +562,7 @@ public class NetWorkManager {
 
     /**
      * 此处的拦截器主要因为检查网络抛异常无法像Rxjava那样自动进入error方法中,如果抛异常的话,又不方便之后的操作,所以去掉检查网络的代码
+     *
      * @param hasCache
      * @return
      */
@@ -543,7 +576,10 @@ public class NetWorkManager {
                     Response response = chain.proceed(request);
                     long t2 = System.nanoTime();
                     double time = (t2 - t1) / 1e6d;
-                    String bodyStr = response.body().string();
+                    String bodyStr  = getStringForSource(response);
+                    if(bodyStr==null){
+                        bodyStr=response.body().string();
+                    }
                     String msg = "\nurl->" + request.url()
                             + "\nparamstag"
                             + "\ntime->" + time
@@ -553,7 +589,7 @@ public class NetWorkManager {
                             + "\nbody->" + bodyStr;
 
                     if (request.method().equals("GET")) {
-                        Logger.i("GET"+msg);
+                        Logger.i("GET" + msg);
                     } else if (request.method().equals("POST")) {
                         Request copyRequest = request.newBuilder().build();
                         if (copyRequest.body() instanceof FormBody) {
@@ -561,19 +597,19 @@ public class NetWorkManager {
                         }
                         Buffer buffer = new Buffer();
                         copyRequest.body().writeTo(buffer);
-                        msg=msg.replace("paramstag","request params:"+buffer.readUtf8());
-                        Logger.i("POST"+msg);
+                        msg = msg.replace("paramstag", "request params:" + buffer.readUtf8());
+                        Logger.i("POST" + msg);
                     } else if (request.method().equals("PUT")) {
-                        Logger.i("PUT"+msg );
+                        Logger.i("PUT" + msg);
                     } else if (request.method().equals("DELETE")) {
-                        Logger.i("DELETE"+msg );
+                        Logger.i("DELETE" + msg);
                     }
 
                     MediaType mediaType = response.body().contentType();
                     return response.newBuilder()
                             .body(okhttp3.ResponseBody.create(mediaType, bodyStr))
                             .build();
-                }else{
+                } else {
                     return chain.proceed(request);
                 }
 
@@ -593,6 +629,19 @@ public class NetWorkManager {
         return okHttpClient.build();
     }
 
+    private static String getStringForSource(Response response) {
+        ResponseBody responseBody = response.body();
+        BufferedSource source = responseBody.source();
+        try {
+            source.request(Long.MAX_VALUE); // Buffer the entire body.
+            Buffer buffer = source.buffer();
+            Charset UTF8 = Charset.forName("UTF-8");
 
+            return buffer.clone().readString(UTF8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
